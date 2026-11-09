@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>RewriteLab - budget barriers</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <nav>
+        <a class="brand" href="index.html">RewriteLab</a
+        ><a href="https://github.com/midya8/rewritelab"
+          >Source &amp; reproduction</a
+        ><a href="#limits">Finite guarantee</a>
+      </nav>
+      <header>
+        <p class="eyebrow">
+          Complete budget filtration / exact obstruction certificates
+        </p>
+        <h1>How much room<br />does a shortcut need?</h1>
+        <p class="lead">
+          A candidate can fit before its proof does. Compare complete rewrite
+          closures across every allowed budget, then inspect the first budget
+          that reaches each equivalent expression.
+        </p>
+        <div class="tags">
+          <span>All 3 / 5 / 7-node levels</span
+          ><span>Least allowed proof budget</span
+          ><span>Complete lower obstructions</span>
+        </div>
+      </header>
+      <section class="workspace">
+        <div>
+          <label for="control">Choose a controlled experiment</label
+          ><select id="control"></select
+          ><label for="expression">Fully parenthesized expression</label
+          ><input id="expression" spellcheck="false" /><label for="budget"
+            >Largest intermediate budget to consider</label
+          ><select id="budget">
+            <option value="3">Through 3 nodes</option>
+            <option value="5">Through 5 nodes</option>
+            <option value="7">Through 7 nodes</option>
+          </select>
+          <div class="costs">
+            <div>
+              <label for="add">+ cost</label
+              ><input id="add" type="number" min="1" max="8" />
+            </div>
+            <div>
+              <label for="multiply">* cost</label
+              ><input id="multiply" type="number" min="1" max="8" />
+            </div>
+            <div>
+              <label for="leaf">Leaf cost</label
+              ><input id="leaf" type="number" min="1" max="8" />
+            </div>
+          </div>
+          <div class="actions">
+            <button id="run">Build every bounded closure</button
+            ><button id="download" disabled>Download atlas evidence</button>
+          </div>
+          <p id="error" role="alert"></p>
+        </div>
+        <aside>
+          <p class="eyebrow">Fitting is not reaching</p>
+          <h2>Two extra nodes.<br />Three rewrite steps.</h2>
+          <p>
+            The source <code>x*(1+1)</code> needs five nodes. The target
+            <code>x+x</code> needs only three. Both fit at five, but the full
+            five-node closure excludes the target. A seven-node intermediate
+            unlocks it.
+          </p>
+          <div class="callout">
+            The weighted constant product is the counter-control: its cheaper
+            addition-only candidates still cannot be reached through seven
+            nodes. A finite cap is not an impossibility result for larger
+            budgets.
+          </div>
+          <p>
+            Each level contains a complete closure certificate. The independent
+            Python checker validates all its legal outgoing edges and shortest
+            proofs before checking the filtration.
+          </p>
+        </aside>
+      </section>
+      <section id="output" hidden>
+        <p class="eyebrow">One candidate, every allowed budget</p>
+        <h2 id="verdict"></h2>
+        <div id="metrics" class="metrics"></div>
+        <h2>The cost frontier</h2>
+        <p class="caption">
+          Best costs and term counts are exact at each budget. A blank level
+          means the source itself does not fit, not that search failed. Costs
+          are arithmetic weights, not measured latency.
+        </p>
+        <div id="frontier" class="answers"></div>
+        <label for="candidate">Every equivalent candidate through the cap</label
+        ><select id="candidate"></select>
+        <div id="detail" class="callout"></div>
+        <h2>Where this candidate first becomes reachable</h2>
+        <div id="levels" class="proof"></div>
+        <h2 id="proof-title"></h2>
+        <p id="proof-caption" class="caption"></p>
+        <div id="proof" class="proof"></div>
+        <div class="verification">
+          <h3>Why the lower obstruction is complete</h3>
+          <p>
+            For every fitting lower level, independent parent-edge and closure
+            checking proves the entire reachable set. Exclusion is therefore a
+            bounded impossibility certificate, not a timeout. The first
+            successful level supplies a shortest path within that level. The
+            same checker independently enumerates every polynomial-equivalent
+            candidate in the full cap grammar.
+          </p>
+          <p>
+            A browser report is independently checked only after
+            <code>rewritelab verify-atlas evidence.json</code> accepts it. Every
+            nested report retains the complete base evidence.
+          </p>
+        </div>
+      </section>
+      <section id="limits">
+        <p class="eyebrow">The exact boundary</p>
+        <h2>Least allowed budget.<br />Not the smallest possible universe.</h2>
+        <p>
+          The allowed budgets are 3, 5 and 7 nodes. First fitting budget counts
+          both source and target. Extra budget is first reachable minus first
+          fitting; it is null when no proof is reached through the cap. For a
+          leaf-only proof, first allowed budget is still 3, even if the path
+          uses just one node. A shortest path at that level need not minimize
+          steps over larger budgets, nor have a peak equal to that allowed
+          budget.
+        </p>
+        <p>
+          The grammar, costs and bidirectional rules are exactly those of the
+          base lab: ordered trees over 0, 1, x, y, + and *, positive integral
+          per-occurrence costs 1..8, full reverse-zero introduction, and a hard
+          seven-node cap. Semantic identity holds over rational arithmetic,
+          established by a degree-bounded exact 5×5 grid argument, not empirical
+          sampling. Source-too-large, target-too-large, blocked, first-reachable
+          and already-reachable are distinct states.
+        </p>
+        <p>
+          This explicit finite rewrite graph is not an e-graph, learned policy,
+          tensor engine, floating-point compiler proof, new algorithm or speed
+          benchmark. No claim about reachability beyond the chosen cap. Barriers
+          are properties of this specified grammar and rules, not universal
+          compiler lower bounds. See BARRIERS.md, CONTRACT.md and SOURCES.md.
+        </p>
+      </section>
+      <footer>
+        Complete small graphs make the missing bridge inspectable.
+      </footer>
+    </main>
+    <script type="module" src="barriers-app.js"></script>
+  </body>
+</html>
