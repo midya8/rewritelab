@@ -126,7 +126,7 @@ checkout with forged evidence rejected. All base and budget-barrier checks
 remain. No continuous parameter-region, latency, learned-policy, newalgorithm
 or benchmark claim. Browser evidence needs independent Python acceptance.
 
-## Continuous cost regions (feature implementation, release pending)
+## Continuous cost regions
 
 The continuous-region extension uses exact rational polygon clipping and a
 separate line-intersection checker to describe all normalized positive cost
