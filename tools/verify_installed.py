@@ -6,8 +6,9 @@ from pathlib import Path
 controls = json.loads(Path(sys.argv[1]).read_text())
 is_atlas = len(sys.argv)>2 and sys.argv[2]=="atlas"
 is_weights = len(sys.argv)>2 and sys.argv[2]=="weights"
-produce = "weights" if is_weights else "atlas" if is_atlas else "optimize"
-check = "verify-weights" if is_weights else "verify-atlas" if is_atlas else "verify"
+is_regions = len(sys.argv)>2 and sys.argv[2]=="regions"
+produce = "regions" if is_regions else "weights" if is_weights else "atlas" if is_atlas else "optimize"
+check = "verify-regions" if is_regions else "verify-weights" if is_weights else "verify-atlas" if is_atlas else "verify"
 with tempfile.TemporaryDirectory() as tmp:
     for c in controls:
         request = Path(tmp) / "request.json"
@@ -30,7 +31,9 @@ with tempfile.TemporaryDirectory() as tmp:
                 subprocess.check_output(cmd + [check, str(report)], cwd=tmp)
             ) == {"valid": True}
         broken = json.loads(module)
-        if is_weights:
+        if is_regions:
+            broken["groups"][0]["semantic"]["positive"] = not broken["groups"][0]["semantic"]["positive"]
+        elif is_weights:
             broken["groups"][0]["semantic_wins"] = 999
         elif is_atlas:
             broken["candidates"][0]["first_reachable_budget"] = 99
