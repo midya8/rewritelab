@@ -125,3 +125,11 @@ all three families reproduce from fresh installed module/console outside the
 checkout with forged evidence rejected. All base and budget-barrier checks
 remain. No continuous parameter-region, latency, learned-policy, newalgorithm
 or benchmark claim. Browser evidence needs independent Python acceptance.
+
+## Continuous cost regions (feature implementation, release pending)
+
+The continuous-region extension uses exact rational polygon clipping and a
+separate line-intersection checker to describe all normalized positive cost
+ratios. Closed boundary-only winners are separated from positive winners, and
+empty, point, segment and area regions retain their dimension and full ties.
+See REGIONS.md for the scope and checking contract.
