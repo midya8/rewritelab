@@ -6,3 +6,6 @@ from .oracle import verify
 
 from .barriers import atlas
 from .barrier_oracle import verify_atlas
+
+from .weights import weights
+from .weight_oracle import verify_weights
