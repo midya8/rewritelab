@@ -10,3 +10,5 @@ cd "$tmp"
 "$tmp/venv/bin/python" "$root/tools/verify_installed.py" "$root/docs/controls.json"
 
 "$tmp/venv/bin/python" "$root/tools/verify_installed.py" "$root/docs/barriers-controls.json" atlas
+
+"$tmp/venv/bin/python" "$root/tools/verify_installed.py" "$root/docs/weights-controls.json" weights
