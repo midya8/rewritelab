@@ -3,3 +3,6 @@
 __version__ = "0.1.0"
 from .search import optimize
 from .oracle import verify
+
+from .barriers import atlas
+from .barrier_oracle import verify_atlas
