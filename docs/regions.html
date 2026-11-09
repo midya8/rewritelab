@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>RewriteLab - exact cost regions</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .regions article {
+        border: 1px solid #d8dfe3;
+        border-radius: 7px;
+        padding: 24px;
+        margin: 20px 0;
+      }
+      .regions svg {
+        width: 100%;
+        max-width: 470px;
+        height: auto;
+        display: block;
+      }
+      .regions select {
+        font-size: 13px;
+      }
+      .region-pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      .vertices {
+        overflow-wrap: anywhere;
+        font-size: 13px;
+      }
+      .region-state {
+        font-weight: 600;
+      }
+      @media (max-width: 700px) {
+        .region-pair {
+          grid-template-columns: 1fr;
+        }
+        .regions article {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav>
+        <a class="brand" href="index.html">RewriteLab</a
+        ><a href="weights.html">Finite weight box</a
+        ><a href="https://github.com/midya8/rewritelab">Source</a>
+      </nav>
+      <header>
+        <p class="eyebrow">
+          Rational halfplanes / complete normalized cost space
+        </p>
+        <h1>Beyond the grid.<br />Every positive price.</h1>
+        <p class="lead">
+          A finite grid can miss a winning expression. Exact rational regions
+          describe every positive addition, multiplication and leaf-cost ratio,
+          with no sampling and no rounded decisions.
+        </p>
+        <div class="tags">
+          <span>Exact rational vertices</span><span>All optimum ties</span
+          ><span>Boundary is not interior</span>
+        </div>
+      </header>
+      <section class="workspace">
+        <div>
+          <label for="control">Choose a controlled experiment</label
+          ><select id="control"></select
+          ><label for="expression">Fully parenthesized expression</label
+          ><input id="expression" spellcheck="false" /><label for="budget"
+            >Fixed intermediate-node budget</label
+          ><select id="budget">
+            <option value="3">3 nodes</option>
+            <option value="5">5 nodes</option>
+            <option value="7">7 nodes</option>
+          </select>
+          <div class="actions">
+            <button id="run">Build every exact region</button
+            ><button id="download" disabled>Download region evidence</button>
+          </div>
+          <p id="error" role="alert"></p>
+        </div>
+        <aside>
+          <p class="eyebrow">Closed geometry, positive decisions</p>
+          <h2>A boundary tie<br />is not a positive winner.</h2>
+          <p>
+            Normalize addition + multiplication + leaf cost to 1. Every positive
+            price ratio is an interior point of this triangle. Edges and
+            vertices have a zero coordinate and are shown only to close the
+            geometry.
+          </p>
+          <p>
+            A group can have an edge or point region yet never win at positive
+            prices. A zero-area region can also pass through the interior and be
+            a real positive-cost tie. We report dimension and positive
+            feasibility separately.
+          </p>
+        </aside>
+      </section>
+      <section id="output" hidden>
+        <p class="eyebrow">Select a ratio, not another search</p>
+        <h2 id="verdict"></h2>
+        <div class="metrics" id="metrics"></div>
+        <div class="costs">
+          <div>
+            <label for="add">Selected addition weight</label
+            ><input
+              id="add"
+              type="number"
+              min="1"
+              max="1000000"
+              step="1"
+              value="1"
+            />
+          </div>
+          <div>
+            <label for="multiply">Selected multiplication weight</label
+            ><input
+              id="multiply"
+              type="number"
+              min="1"
+              max="1000000"
+              step="1"
+              value="8"
+            />
+          </div>
+          <div>
+            <label for="leaf">Selected leaf weight</label
+            ><input
+              id="leaf"
+              type="number"
+              min="1"
+              max="1000000"
+              step="1"
+              value="1"
+            />
+          </div>
+        </div>
+        <p id="point-error" role="alert"></p>
+        <div id="detail" class="verdict"></div>
+        <div class="region-pair">
+          <article>
+            <label for="semantic">Every semantic optimal expression</label
+            ><select id="semantic"></select>
+            <p id="semantic-count"></p>
+          </article>
+          <article>
+            <label for="reachable">Every reachable optimal expression</label
+            ><select id="reachable"></select>
+            <p id="reachable-count"></p>
+          </article>
+        </div>
+        <h2>Every group, both exact regions</h2>
+        <p>
+          Coordinates are (addition, multiplication, leaf). Each diagram uses
+          the same triangle: addition at left, multiplication at right, leaf at
+          top. Teal is this group's closed optimum region; the outlined point is
+          the selected positive ratio. Diagrams use rounded display coordinates
+          only. Exact reduced rational vertices below each diagram define the
+          result.
+        </p>
+        <p>
+          Shared edges and vertices belong to every tied group. Area is not a
+          probability. Empty reachable membership always means an empty
+          reachable region.
+        </p>
+        <div id="groups" class="regions"></div>
+        <div class="verification">
+          <h3>Different geometry, independent checking</h3>
+          <p>
+            The generator clips polygons with exact rational arithmetic. The
+            independent Python checker constructs feasible intersections of
+            every pair of supporting lines, without calling clipping or the
+            generator. It first checks the complete unit-cost closure, counts
+            canonical syntax tokens and reconstructs every membership, rational
+            vertex, dimension and positive-feasibility flag.
+          </p>
+          <p>
+            Browser evidence is independently checked only after
+            <code>rewritelab verify-regions evidence.json</code> accepts it.
+            Syntax and the base independent closure checker are shared. Export
+            contains the complete geometry, not only the selected point; request
+            weights remain the validated unit-cost seed.
+          </p>
+        </div>
+      </section>
+      <section>
+        <p class="eyebrow">Exact scope</p>
+        <h2>A continuous cost space.<br />A finite expression space.</h2>
+        <p>
+          The same complete ordered arithmetic-tree grammar, bidirectional
+          rules, rational semantics and maximum seven-node budget still apply.
+          Normalize by any positive common scale without changing optimum
+          membership. Closed nonnegative regions describe their strictly
+          positive interior intersections exactly, including irrational weight
+          ratios through rational inequalities. The zero-cost boundary does not
+          enable zero-cost optimizer requests.
+        </p>
+        <p>
+          Costs count tree occurrences, not shared subexpressions or hardware
+          latency. No e-graph, tensor optimizer, learned costs, new algorithm or
+          compiler speed benchmark. Exact algebraic identities are not IEEE
+          floating-point transformation licenses. Enumeration remains
+          exponential. See REGIONS.md, CONTRACT.md and SOURCES.md.
+        </p>
+      </section>
+      <footer>
+        Exact boundaries, full ties, no sampled impossibility claim.
+      </footer>
+    </main>
+    <script type="module" src="regions-app.js"></script>
+  </body>
+</html>
