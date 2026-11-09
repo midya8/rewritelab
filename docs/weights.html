@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>RewriteLab - the whole cost box</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .weight-grid {
+        display: grid;
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        gap: 6px;
+        margin: 25px 0;
+      }
+      .weight-grid button {
+        padding: 12px 2px;
+        font-size: 13px;
+      }
+      .weight-grid button[data-gap="0"] {
+        background: #eaf3f8;
+        color: #172e40;
+      }
+      .weight-grid button[aria-pressed="true"] {
+        outline: 3px solid #9d542b;
+        outline-offset: 1px;
+      }
+      .group-list article {
+        border: 1px solid #d8dfe3;
+        border-radius: 7px;
+        padding: 24px;
+        margin: 20px 0;
+      }
+      .group-list select {
+        font-size: 13px;
+      }
+      .weight-grid button small {
+        display: block;
+        font-size: 10px;
+      }
+      .grid-caption {
+        font-size: 14px;
+        color: #566570;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav>
+        <a class="brand" href="index.html">RewriteLab</a
+        ><a href="barriers.html">Budget barriers</a
+        ><a href="https://github.com/midya8/rewritelab">Source</a>
+      </nav>
+      <header>
+        <p class="eyebrow">
+          Complete finite weight box / exact count-vector ties
+        </p>
+        <h1>One graph.<br />Every cost tradeoff.</h1>
+        <p class="lead">
+          The rewrite paths do not change when prices change. Score every
+          equivalent expression at all 512 positive integral node-weight
+          triples, then inspect the exact optima, ties and missing shortcuts.
+        </p>
+        <div class="tags">
+          <span>512 weight triples</span><span>Complete group memberships</span
+          ><span>Dominance is not a win count</span>
+        </div>
+      </header>
+      <section class="workspace">
+        <div>
+          <label for="control">Choose a controlled experiment</label
+          ><select id="control"></select
+          ><label for="expression">Fully parenthesized expression</label
+          ><input id="expression" spellcheck="false" /><label for="budget"
+            >Fixed intermediate-node budget</label
+          ><select id="budget">
+            <option value="3">3 nodes</option>
+            <option value="5">5 nodes</option>
+            <option value="7">7 nodes</option>
+          </select>
+          <div class="costs">
+            <div>
+              <label for="add">Selected + cost</label
+              ><input id="add" type="number" min="1" max="8" />
+            </div>
+            <div>
+              <label for="multiply">Selected * cost</label
+              ><input id="multiply" type="number" min="1" max="8" />
+            </div>
+            <div>
+              <label for="leaf">Selected leaf cost</label
+              ><input id="leaf" type="number" min="1" max="8" />
+            </div>
+          </div>
+          <div class="actions">
+            <button id="run">Build the complete cost box</button
+            ><button id="download" disabled>Download weight evidence</button>
+          </div>
+          <p id="error" role="alert"></p>
+        </div>
+        <aside>
+          <p class="eyebrow">A crossover, not a winner by design</p>
+          <h2>Four can be<br />two times two.</h2>
+          <p>
+            The seven-node product <code>(1+1)*(1+1)</code> has operation counts
+            (2 additions, 1 multiplication, 4 leaves). Its addition-only
+            equivalents have (3, 0, 4). They tie exactly when addition and
+            multiplication have the same cost. No rule path connects them inside
+            seven nodes.
+          </p>
+          <div class="callout">
+            In this box, 224 weight triples have a positive gap and 288 do not.
+            The two semantic groups each win at 288 triples because the 64 tie
+            triples count for both groups. Wins are memberships, not disjoint
+            probabilities.
+          </div>
+          <p>
+            A dominated count vector cannot win under any strictly positive
+            weights. A vector with zero wins in this finite box need not be
+            dominated, nor can it be ruled out at every positive weight.
+          </p>
+        </aside>
+      </section>
+      <section id="output" hidden>
+        <p class="eyebrow">Every result retained, nothing sampled</p>
+        <h2 id="verdict"></h2>
+        <div id="metrics" class="metrics"></div>
+        <h2>The exact selected outcome</h2>
+        <div id="detail" class="callout"></div>
+        <div class="answers">
+          <article>
+            <p class="eyebrow">Reachable optimal ties</p>
+            <label for="reachable">Every reachable optimal expression</label
+            ><select id="reachable"></select>
+            <p id="reachable-count"></p>
+          </article>
+          <article>
+            <p class="eyebrow">Semantic optimal ties</p>
+            <label for="semantic">Every semantic optimal expression</label
+            ><select id="semantic"></select>
+            <p id="semantic-count"></p>
+          </article>
+        </div>
+        <h2>All 64 outcomes at this leaf cost</h2>
+        <p class="grid-caption">
+          Rows: multiplication cost 1 to 8, top to bottom. Columns: addition
+          cost 1 to 8, left to right. Each cell shows the exact objective gap.
+          Blue means gap zero, dark means a positive gap. The outlined cell is
+          selected; click or use keyboard focus. Changing leaf cost selects
+          another complete slice, not another search.
+        </p>
+        <div
+          id="grid"
+          class="weight-grid"
+          role="group"
+          aria-label="Exact cost gaps at selected leaf cost"
+        ></div>
+        <h2>Every operation-count group</h2>
+        <p class="caption">
+          Vectors are (additions, multiplications, leaves). All expression
+          memberships and reachable subsets are complete. A tie contributes a
+          win to every participating group, so win counts do not form a
+          partition. Cost is counted per tree occurrence, not shared
+          subexpressions or runtime latency.
+        </p>
+        <div id="groups" class="group-list"></div>
+        <div class="verification">
+          <h3>One closure certificate, all 512 exact score checks</h3>
+          <p>
+            The nested evidence is a complete unit-cost rewrite closure and
+            polynomial-semantic census. Reachability is weight-independent. The
+            independent Python verifier checks this closure, counts canonical
+            syntax symbols separately from the generator's tree traversal, then
+            checks every weight triple, optimum tie set, group membership and
+            dominance claim.
+          </p>
+          <p>
+            Downloaded browser evidence is independently checked only after
+            <code>rewritelab verify-weights evidence.json</code> accepts it. The
+            syntax contract and base independent closure checker are shared, not
+            reimplemented a third time.
+          </p>
+        </div>
+      </section>
+      <section id="limits">
+        <p class="eyebrow">Finite guarantee</p>
+        <h2>Every price in this box.<br />No promise outside it.</h2>
+        <p>
+          Exactly 512 integral (+, *, leaf) triples in {1,...,8} cubed. The
+          fixed node budget is 3, 5 or 7. Complete ordered arithmetic trees over
+          0, 1, x, y, + and *, with the same bidirectional base rewrites and
+          full reverse-zero introduction. Semantic identities are over rational
+          arithmetic, not IEEE floating point.
+        </p>
+        <p>
+          Dominance means another distinct count vector is no larger in any
+          coordinate and smaller in at least one. With strictly positive weights
+          this vector is always strictly cheaper. We do not equate nondominance
+          with winning in the box, nor an absence of wins with global
+          impossibility. Win counts count weight triples, not expression counts
+          or probabilities. Costs and selected optima can change without
+          changing the graph or shortest distances.
+        </p>
+        <p>
+          All score arithmetic is exact at these small bounds. The explicit
+          grammar grows exponentially under a generalized budget and remains
+          capped at seven nodes. This is not a new algorithm, learned optimizer,
+          e-graph, tensor engine or compiler benchmark. See WEIGHTS.md,
+          CONTRACT.md and SOURCES.md.
+        </p>
+      </section>
+      <footer>
+        When the graph stays fixed, the whole cost box is small enough to
+        inspect.
+      </footer>
+    </main>
+    <script type="module" src="weights-app.js"></script>
+  </body>
+</html>
