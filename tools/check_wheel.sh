@@ -8,3 +8,5 @@ python -m venv "$tmp/venv"
 "$tmp/venv/bin/python" -m pip install --no-deps "$tmp"/dist/*.whl
 cd "$tmp"
 "$tmp/venv/bin/python" "$root/tools/verify_installed.py" "$root/docs/controls.json"
+
+"$tmp/venv/bin/python" "$root/tools/verify_installed.py" "$root/docs/barriers-controls.json" atlas

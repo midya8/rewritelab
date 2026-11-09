@@ -1,0 +1,98 @@
+[
+  {
+    "label": "A cheaper term, blocked by five nodes",
+    "input": {
+      "expression": "(x*(1+1))",
+      "max_nodes": 7,
+      "costs": {
+        "add": 1,
+        "multiply": 1,
+        "leaf": 1
+      }
+    }
+  },
+  {
+    "label": "Three-node cap: no room for a larger detour",
+    "input": {
+      "expression": "(x+x)",
+      "max_nodes": 3,
+      "costs": {
+        "add": 1,
+        "multiply": 1,
+        "leaf": 1
+      }
+    }
+  },
+  {
+    "label": "Zero can hide arbitrary syntax",
+    "input": {
+      "expression": "(x*0)",
+      "max_nodes": 7,
+      "costs": {
+        "add": 1,
+        "multiply": 1,
+        "leaf": 1
+      }
+    }
+  },
+  {
+    "label": "Factoring when multiplication costs more",
+    "input": {
+      "expression": "((x*x)+(x*y))",
+      "max_nodes": 7,
+      "costs": {
+        "add": 1,
+        "multiply": 5,
+        "leaf": 1
+      }
+    }
+  },
+  {
+    "label": "A square with no room to expand",
+    "input": {
+      "expression": "((x+y)*(x+y))",
+      "max_nodes": 7,
+      "costs": {
+        "add": 1,
+        "multiply": 1,
+        "leaf": 1
+      }
+    }
+  },
+  {
+    "label": "Associativity and all optimal ties",
+    "input": {
+      "expression": "((x+y)+1)",
+      "max_nodes": 7,
+      "costs": {
+        "add": 1,
+        "multiply": 1,
+        "leaf": 1
+      }
+    }
+  },
+  {
+    "label": "Even seven nodes can miss the semantic optimum",
+    "input": {
+      "expression": "((1+1)*(1+1))",
+      "max_nodes": 7,
+      "costs": {
+        "add": 1,
+        "multiply": 8,
+        "leaf": 1
+      }
+    }
+  },
+  {
+    "label": "Identity cycles do not add new value",
+    "input": {
+      "expression": "x",
+      "max_nodes": 7,
+      "costs": {
+        "add": 1,
+        "multiply": 1,
+        "leaf": 1
+      }
+    }
+  }
+]
