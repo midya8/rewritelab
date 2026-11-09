@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Exact bounded arithmetic rewrite search, shortest proofs and an independent complete finite semantic optimum."
+    />
+    <title>RewriteLab - a shortcut can need a detour</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <nav>
+        <a class="brand" href="#">RewriteLab</a
+        ><a href="https://github.com/midya8/rewritelab"
+          >Source &amp; reproduction</a
+        ><a href="#limits">The exact boundary</a>
+      </nav>
+      <header>
+        <p class="eyebrow">Inspectable optimization / finite algebra</p>
+        <h1>A shortcut can<br />need a larger detour.</h1>
+        <p class="lead">
+          The cheapest equivalent expression may exist inside your size budget,
+          yet stay unreachable without a bigger intermediate step. Inspect the
+          entire bounded rewrite closure. Then ask a separate semantic oracle
+          what it missed.
+        </p>
+        <div class="tags">
+          <span>Every reachable term</span><span>Shortest rewrite proofs</span
+          ><span>Exact semantic-optimum gap</span>
+        </div>
+      </header>
+      <section class="workspace">
+        <div>
+          <label for="control">Choose a controlled experiment</label
+          ><select id="control"></select
+          ><label for="expression"
+            >Expression (0, 1, x, y, fully parenthesized + and *)</label
+          ><input id="expression" value="(x*(1+1))" spellcheck="false" /><label
+            for="budget"
+            >Maximum nodes in every intermediate term</label
+          ><select id="budget">
+            <option value="3">3 nodes · 36 grammar terms</option>
+            <option value="5" selected>5 nodes · 548 grammar terms</option>
+            <option value="7">7 nodes · 10,788 grammar terms</option>
+          </select>
+          <div class="costs">
+            <div>
+              <label for="add">+ cost</label
+              ><input id="add" type="number" min="1" max="8" value="1" />
+            </div>
+            <div>
+              <label for="multiply">* cost</label
+              ><input id="multiply" type="number" min="1" max="8" value="1" />
+            </div>
+            <div>
+              <label for="leaf">Leaf cost</label
+              ><input id="leaf" type="number" min="1" max="8" value="1" />
+            </div>
+          </div>
+          <div class="actions">
+            <button id="run">Search the complete bounded closure</button
+            ><button id="download" disabled>Download evidence</button>
+          </div>
+          <p id="error" role="alert"></p>
+        </div>
+        <aside>
+          <p class="eyebrow">One budget, two questions</p>
+          <h2>Can I get there?<br />Is it algebraically equal?</h2>
+          <p>
+            At five nodes, <code>x*(1+1)</code> cannot reach
+            <code>x+x</code> with these rules. Distribution first needs the
+            seven-node expression <code>(x*1)+(x*1)</code>. The shorter answer
+            fits; the bridge does not.
+          </p>
+          <div class="callout">
+            Switch to the seven-node control. The same source reaches
+            <code>x+x</code> in exactly three rewrites. No change to its meaning
+            or the operator costs.
+          </div>
+          <p>
+            The search keeps every term rather than greedily discarding larger
+            ones. Every intermediate must still obey the chosen budget. A
+            complete bounded closure is not the set of all algebraically
+            equivalent expressions.
+          </p>
+        </aside>
+      </section>
+      <section id="output" hidden>
+        <p class="eyebrow">Complete under this grammar, rules and budget</p>
+        <h2 id="verdict"></h2>
+        <p id="explanation"></p>
+        <div id="metrics" class="metrics"></div>
+        <div class="answers">
+          <article>
+            <p class="eyebrow">Best reachable</p>
+            <code id="reachable-best"></code>
+            <p id="reachable-caption"></p>
+            <button id="pick-reachable">Inspect its proof</button>
+          </article>
+          <article>
+            <p class="eyebrow">Best semantic equivalent</p>
+            <code id="semantic-best"></code>
+            <p id="semantic-caption"></p>
+            <button id="pick-semantic">Inspect this candidate</button>
+          </article>
+        </div>
+        <h2>The complete search, by shortest distance</h2>
+        <p class="caption">
+          Each bar counts distinct reachable terms at that minimum rewrite
+          distance. Cycles add no duplicate terms. The height is a count, not
+          expression cost or compiler speed.
+        </p>
+        <svg
+          id="plot"
+          viewBox="0 0 760 290"
+          role="img"
+          aria-label="Reachable term counts by shortest rewrite distance"
+        ></svg>
+        <div id="shells" class="shells"></div>
+        <div class="inspect">
+          <div>
+            <label for="state"
+              >Every reachable term (cost · shortest distance ·
+              expression)</label
+            ><select id="state"></select
+            ><label for="semantic"
+              >Every semantic equivalent in the finite grammar</label
+            ><select id="semantic"></select>
+            <p class="caption">
+              Both lists are complete, sorted by canonical expression. Semantic
+              candidates are marked reachable or blocked under this budget.
+              Positive node costs count each tree occurrence, not shared
+              subexpressions.
+            </p>
+            <div id="detail" class="callout"></div>
+          </div>
+          <div>
+            <h2 id="tree-title">Selected expression tree</h2>
+            <svg
+              id="tree"
+              viewBox="0 0 760 320"
+              role="img"
+              aria-label="Selected arithmetic expression tree"
+            ></svg>
+            <p class="caption">
+              One circle per syntax node. Multiplication and addition are exact
+              rational algebra here, not IEEE floating-point transformations.
+            </p>
+          </div>
+        </div>
+        <h2 id="proof-title">A shortest rewrite proof</h2>
+        <p id="proof-caption" class="caption"></p>
+        <div id="proof" class="proof"></div>
+        <div class="verification">
+          <h3>What the independent checker establishes</h3>
+          <p>
+            Every parent edge matches a separately implemented rule template at
+            its recorded tree path. Parent chains prove reachability. Closure
+            checks every legal outgoing rewrite; distance inequalities plus
+            those paths prove shortest distances. A separate full grammar census
+            uses exact evaluation on a 5×5 integer grid. Every term has degree
+            at most four in either variable, so equality at those 25 points
+            proves a polynomial identity over all rational x and y. This is a
+            finite-degree identity argument, not an empirical sampling claim.
+          </p>
+          <p>
+            Browser evidence is not independently checked until the Python
+            verifier accepts the downloaded JSON. The generator uses polynomial
+            coefficient maps; that verifier uses neither the generator nor those
+            maps.
+          </p>
+        </div>
+      </section>
+      <section id="limits">
+        <p class="eyebrow">Scope &amp; attribution</p>
+        <h2>Finite on purpose. Exact about what is missing.</h2>
+        <p>
+          Ordered binary expression trees over leaves 0, 1, x and y, with + and
+          *. No subtraction, division, arbitrary constants, variables beyond
+          x/y, tensor shapes or floating point. The intermediate node budget is
+          3, 5 or 7. Every addition, multiplication and leaf occurrence has an
+          integral cost from 1 to 8. The entire grammar contains 36, 548 or
+          10,788 terms. No timeout or silent truncation changes the result.
+        </p>
+        <p>
+          Rules are bidirectional commutativity, associativity, additive-zero
+          and multiplicative-one identities, zero annihilation and left/right
+          distribution/factoring. A reverse zero rewrite may introduce any
+          fitting term from the full grammar. Exactly one rule acts at exactly
+          one subtree per step. The proof budget counts all tree nodes,
+          including repeated occurrences. Full closure includes non-improving
+          and cyclic rewrites. The semantic optimum is limited to the same
+          finite grammar, not arbitrary expressions outside it.
+        </p>
+        <p>
+          This is an explicit bounded term-rewrite graph, not an e-graph or an
+          implementation of egg, TENSAT, TASO, Herbie or Alive2. Those systems
+          supply context for compiler optimization, graph rewriting and
+          validation. It has no neural model, learned policy, tensor execution,
+          GPU benchmark, runtime-speedup, new algorithm or
+          production-compiler-equivalence claim. Exact rational identities need
+          not preserve IEEE floating-point behavior. See CONTRACT.md and
+          SOURCES.md in the source repository.
+        </p>
+      </section>
+      <footer>
+        Built from small, complete objects so the failure is inspectable.
+      </footer>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
