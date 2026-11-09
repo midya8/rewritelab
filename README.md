@@ -96,3 +96,32 @@ The full suite has 20 Python tests and six Node/Chrome tests. Installed module
 and console reproduce eight controls for each family outside the checkout.
 No claim about larger budgets, globally shortest rewrite paths, new algorithms
 or compiler speed. Base controls, contract and source ledger remain unchanged.
+
+## Complete cost-weight atlas
+
+[Live cost-weight atlas](https://midya8.github.io/rewritelab/weights.html) ·
+[Exact box contract](WEIGHTS.md) · [Independent checker](rewritelab/weight_oracle.py)
+
+One fixed graph, all512integral (+, *, leaf) triples in1..8. Complete operation-
+count groups retain every semantic expression and reachable subset; every
+outcome retains full optimum ties, exact costs and gaps. The interactive8by8
+slice changes leaf cost without another search. Every group member and optimum
+tie is selectable. Dominance is separate from a finite-box win count.
+
+For constant four, vectors(2,1,4) and(3,0,4) tie exactly at add=multiply.
+224of512triples have a positive gap,288do not,64tie; each semantic group wins
+288times because tie memberships overlap. The five-node x*(1+1) control has
+512positive gaps: its reachable vector is strictly dominated by blocked x+x.
+No invented crossover is used for that dominated pair.
+
+The independent checker validates one full unit-cost closure, counts canonical
+syntax symbols separately from recursive tree-count generation, and checks all
+512outcomes, groups, memberships, ties, gaps, dominators and wins. All512full
+ordinary optimize reports are compared for both constant crossover and blocked
+bridge controls.27Python tests, nineNode/Chrome tests;17complete cross-language
+weight reports/8,704outcomes/93groups; actualChrome25weight reports/all4,096
+outcome selections and34,570expression selections. Eight controls each across
+all three families reproduce from fresh installed module/console outside the
+checkout with forged evidence rejected. All base and budget-barrier checks
+remain. No continuous parameter-region, latency, learned-policy, newalgorithm
+or benchmark claim. Browser evidence needs independent Python acceptance.
