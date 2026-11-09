@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "rewritelab"
+version = "0.1.0"
+description = "Exact bounded arithmetic rewrite closure, shortest proofs and independent semantic optimum"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+[project.scripts]
+rewritelab = "rewritelab.__main__:main"
+[tool.setuptools]
+packages = ["rewritelab"]
