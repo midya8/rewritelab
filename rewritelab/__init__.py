@@ -9,3 +9,6 @@ from .barrier_oracle import verify_atlas
 
 from .weights import weights
 from .weight_oracle import verify_weights
+
+from .regions import regions
+from .region_oracle import verify_regions
