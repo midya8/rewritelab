@@ -1,8 +1,7 @@
 # Exact continuous cost regions
 
-Status: feature implementation; final release awaits main, deployment and
-showcase verification. The separate cost-weight atlas retains its finite
-1..8 integer-box contract.
+This continuous-region extension has its own geometry contract. The separate
+cost-weight atlas retains its finite 1..8 integer-box contract.
 
 `regions` consumes the exact ordinary request and validates its selected costs
 before normalization. It builds one complete unit-cost closure at the fixed
