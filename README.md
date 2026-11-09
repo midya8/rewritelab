@@ -73,3 +73,26 @@ node costs are supplied arithmetic weights, not measured latency. Full report
 size and search resources are exponential in a generalized node budget; the
 hard seven-node cap is part of the contract, not a scaling result.
 See [SOURCES.md](SOURCES.md).
+
+## Budget-barrier atlas
+
+[Live atlas](https://midya8.github.io/rewritelab/barriers.html) ·
+[Exact filtration contract](BARRIERS.md) · [Independent atlas verifier](rewritelab/barrier_oracle.py)
+
+Inspect every 3/5/7-node level through the selected cap, every semantic candidate,
+its first fitting versus first reachable budget, the complete lower obstruction
+and a shortest proof at its first reachable level. For x*(1+1) -> x+x, first
+fitting is 5, first reachable is 7, extra budget is 2 and shortest distance is 3.
+The cap-7 weighted constant product still excludes five semantic candidates.
+Leaf x has first allowed budget 3 but a zero-step path with actual peak 1.
+
+The new independent checker validates all nested complete closures before
+re-enumerating candidate signatures and budget labels. A separate test heap
+minimizes peak-node labels over the independent template graph. 36 complete
+Python/JS atlases compare 13,016 candidate rows and 13,745 nested proof rows;
+actual Chrome checks 25 complete atlases and all 3,844 candidate selections,
+all five level states, three widths, cap changes, export and invalidation.
+The full suite has 20 Python tests and six Node/Chrome tests. Installed module
+and console reproduce eight controls for each family outside the checkout.
+No claim about larger budgets, globally shortest rewrite paths, new algorithms
+or compiler speed. Base controls, contract and source ledger remain unchanged.
