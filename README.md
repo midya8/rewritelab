@@ -1,11 +1,21 @@
 # RewriteLab
 
-A shortcut can need a larger detour. An algebraically cheaper expression may fit
-inside a size budget, yet remain unreachable without a bigger intermediate step.
+RewriteLab explores a bounded graph of algebraically equivalent expressions.
+It compares the cheapest reachable expression with every equivalent expression
+in a small grammar. A cheaper expression can fit the size budget yet require a
+larger intermediate expression to reach it.
 
 [Live inspector](https://midya8.github.io/rewritelab/) · [Exact contract](CONTRACT.md) · [Search](rewritelab/search.py) · [Independent checker](rewritelab/oracle.py)
 
-## A concrete failure, not an optimizer-success flag
+## Rewrite closure and cost atlases
+
+The base report enumerates reachable rewrites at one node budget. The budget
+atlas tracks when an expression first fits and when it first becomes reachable.
+The integer-weight atlas varies supplied operation costs over a finite box;
+the continuous-region extension computes exact normalized cost regions.
+These are different searches and summaries, not compiler speed measurements.
+
+## A blocked shortcut
 
 With a five-node intermediate budget, `x*(1+1)` reaches only itself and
 `(1+1)*x`. Both cost 5 with unit node costs. The semantic census finds `x+x`
@@ -32,7 +42,7 @@ closure with algebraic completeness.
   inequalities, and compares exact 25-point signatures. Degree at most four in
   each variable makes that grid a universal rational polynomial-identity test,
   not an empirical sampling claim. Shared parsing/costing are explicit.
-- 11 Python tests include every legal edge in all three full grammars, all 548
+- The original 11 Python tests include every legal edge in all three full grammars, all 548
   five-node sources, 80 seeded seven-node requests, weighted ties, forged
   closure/proofs/types, and verification with the generator disabled.
 - 72 complete Python/JavaScript reports compare 111,316 reachable proof rows and
@@ -86,13 +96,13 @@ fitting is 5, first reachable is 7, extra budget is 2 and shortest distance is 3
 The cap-7 weighted constant product still excludes five semantic candidates.
 Leaf x has first allowed budget 3 but a zero-step path with actual peak 1.
 
-The new independent checker validates all nested complete closures before
+The independent budget-atlas checker validates all nested complete closures before
 re-enumerating candidate signatures and budget labels. A separate test heap
 minimizes peak-node labels over the independent template graph. 36 complete
 Python/JS atlases compare 13,016 candidate rows and 13,745 nested proof rows;
 actual Chrome checks 25 complete atlases and all 3,844 candidate selections,
 all five level states, three widths, cap changes, export and invalidation.
-The full suite has 20 Python tests and six Node/Chrome tests. Installed module
+That budget-atlas release had 20 Python tests and six Node/Chrome tests. Installed module
 and console reproduce eight controls for each family outside the checkout.
 No claim about larger budgets, globally shortest rewrite paths, new algorithms
 or compiler speed. Base controls, contract and source ledger remain unchanged.
@@ -102,28 +112,29 @@ or compiler speed. Base controls, contract and source ledger remain unchanged.
 [Live cost-weight atlas](https://midya8.github.io/rewritelab/weights.html) ·
 [Exact box contract](WEIGHTS.md) · [Independent checker](rewritelab/weight_oracle.py)
 
-One fixed graph, all512integral (+, *, leaf) triples in1..8. Complete operation-
+One fixed graph, all 512 integral (+, *, leaf) triples in 1..8. Complete operation-
 count groups retain every semantic expression and reachable subset; every
-outcome retains full optimum ties, exact costs and gaps. The interactive8by8
+outcome retains full optimum ties, exact costs and gaps. The interactive 8-by-8
 slice changes leaf cost without another search. Every group member and optimum
 tie is selectable. Dominance is separate from a finite-box win count.
 
-For constant four, vectors(2,1,4) and(3,0,4) tie exactly at add=multiply.
-224of512triples have a positive gap,288do not,64tie; each semantic group wins
-288times because tie memberships overlap. The five-node x*(1+1) control has
-512positive gaps: its reachable vector is strictly dominated by blocked x+x.
+For constant four, vectors (2,1,4) and (3,0,4) tie exactly at add=multiply.
+224 of 512 triples have a positive gap, 288 do not, 64 tie; each semantic group wins
+288 times because tie memberships overlap. The five-node x*(1+1) control has
+512 positive gaps: its reachable vector is strictly dominated by blocked x+x.
 No invented crossover is used for that dominated pair.
 
 The independent checker validates one full unit-cost closure, counts canonical
 syntax symbols separately from recursive tree-count generation, and checks all
-512outcomes, groups, memberships, ties, gaps, dominators and wins. All512full
+512 outcomes, groups, memberships, ties, gaps, dominators and wins. All 512 full
 ordinary optimize reports are compared for both constant crossover and blocked
-bridge controls.27Python tests, nineNode/Chrome tests;17complete cross-language
-weight reports/8,704outcomes/93groups; actualChrome25weight reports/all4,096
-outcome selections and34,570expression selections. Eight controls each across
+bridge controls. That release had 27 Python tests and nine Node/Chrome tests,
+with 17 complete cross-language weight reports, 8,704 outcomes and 93 groups.
+Actual Chrome checked 25 weight reports, all 4,096 outcome selections and 34,570
+expression selections. Eight controls each across
 all three families reproduce from fresh installed module/console outside the
 checkout with forged evidence rejected. All base and budget-barrier checks
-remain. No continuous parameter-region, latency, learned-policy, newalgorithm
+remain. No continuous parameter-region, latency, learned-policy, new-algorithm
 or benchmark claim. Browser evidence needs independent Python acceptance.
 
 ## Continuous cost regions
@@ -132,4 +143,5 @@ The continuous-region extension uses exact rational polygon clipping and a
 separate line-intersection checker to describe all normalized positive cost
 ratios. Closed boundary-only winners are separated from positive winners, and
 empty, point, segment and area regions retain their dimension and full ties.
-See REGIONS.md for the scope and checking contract.
+The current suite has 35 Python and 12 Node/Chrome tests across the base graph
+and all three atlases. See [REGIONS.md](REGIONS.md) for the geometry and checking contract.
